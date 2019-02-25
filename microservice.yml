@@ -4,7 +4,7 @@ lifecycle:
     command: ["microservice-firebase"]
 info:
   version: 1.0.0
-  title: firebase 
+  title: firebase
   description: This is a firebase service
   contact:
     name: Rohit Shetty
@@ -12,42 +12,335 @@ info:
     email: rohits@heptrace.com
   license:
     name: MIT
-    url: https://opensource.org/licenses/MIT 
+    url: https://opensource.org/licenses/MIT
 actions:
-  sendmessage:
-    help: Send message to topic
+  send_notification_by_token:
+    help: Send notification message using token
     http:
       port: 3000
       method: post
-      path: /send-message
+      path: /send-notification-by-token
       contentType: application/json
     arguments:
-      body:
+      token: 
+        type: string
+        in: requestBody
+        required: true
+        help: Registration token to send a message to.
+      notification: 
         type: object
         in: requestBody
         required: true
-        help: message data to send with topic
-      topic: 
+        help: The notification object contains title and body.Both are of string type wrapped in object.
+      collapse_key:
         type: string
-        in: query
-        required: true
-        help: The topic to send message
+        in: requestBody
+        required: false
+        help: The identifier of a group of messages that can be collapsed, so that only the last message gets sent when delivery can be resumed
+      # priority:
+      #   type: enum
+      #   enum:
+      #   - NORMAL
+      #   - HIGH
+      #   in: requestBody
+      #   required: false
+      #   help: Message priority. Can take "normal" and "high" values
+      ttl:
+        type: string
+        in: requestBody
+        required: false
+        help: How long (in seconds) the message should be kept in FCM storage if the device is offline. The maximum time to live supported is 4 weeks, and the default value is 4 weeks if not set
+      restricted_package_name:
+        type: string
+        in: requestBody
+        required: false
+        help: Package name of the application where the registration token must match in order to receive the message
     output:   
       type: object
       contentType: application/json
       properties:
-        status:
-          help: The amount of charge created
+        Ok:
+          help: Boolean value which represents message sent is successful or failed.
+          type: boolean
+        status_code:
+          help: HTTP status code for the response.
           type: int
-        topic_msgid:
-          help: message id of topic
-          type: string
+        multicast_id:
+          help: Unique ID (number) identifying the multicast message.
+          type: number
         success:
-          help: return message send success 0 for false and 1 for true
+          help: Number of messages that were processed without an error.
+          type: number
+        failure:
+          help: Number of messages that could not be processed.
+          type: number
+        results:
+          help: Array of objects representing the status of the messages processed.
+          type: object
+  send_notification_by_topic:
+    help: Send notification message using topic
+    http:
+      port: 3000
+      method: post
+      path: /send-notification-by-topic
+      contentType: application/json
+    arguments:
+      topic: 
+        type: string
+        in: requestBody
+        required: true
+        help: Topic name to send a message to, e.g. "weather". (Note- "/topics/" prefix should not be provided)
+      notification: 
+        type: object
+        in: requestBody
+        required: true
+        help: The notification object contains title and body.Both are of string type wrapped in object.
+      collapse_key:
+        type: string
+        in: requestBody
+        required: false
+        help: The identifier of a group of messages that can be collapsed, so that only the last message gets sent when delivery can be resumed
+      # priority:
+      #   type: enum
+      #   enum:
+      #   - NORMAL
+      #   - HIGH
+      #   in: requestBody
+      #   required: false
+      #   help: Message priority. Can take "normal" and "high" values
+      ttl:
+        type: string
+        in: requestBody
+        required: false
+        help: How long (in seconds) the message should be kept in FCM storage if the device is offline. The maximum time to live supported is 4 weeks, and the default value is 4 weeks if not set
+      restricted_package_name:
+        type: string
+        in: requestBody
+        required: false
+        help: Package name of the application where the registration token must match in order to receive the message
+    output:   
+      type: object
+      contentType: application/json
+      properties:
+        Ok:
+          help: Boolean value which represents message sent is successful or failed.
+          type: boolean
+        status_code:
+          help: HTTP status code for the response.
           type: int
+        message_id:
+          help: The topic message ID when FCM has successfully received the request and will attempt to deliver to all subscribed devices.
+          type: number
+        error:
+          help: Error that occurred when processing the message. 
+          type: string
+  send_data_by_token:
+    help: Send data message using token
+    http:
+      port: 3000
+      method: post
+      path: /send-data-by-token
+      contentType: application/json
+    arguments:
+      token: 
+        type: string
+        in: requestBody
+        required: true
+        help: Registration token to send a message to.
+      data : 
+        type: object
+        in: requestBody
+        required: true
+        help: The data object contains a list of key/value pairs.
+    output:   
+      type: object
+      contentType: application/json
+      properties:
+        Ok:
+          help: Boolean value which represents message sent is successful or failed.
+          type: boolean
+        status_code:
+          help: HTTP status code for the response.
+          type: int
+        multicast_id:
+          help: Unique ID (number) identifying the multicast message.
+          type: number
+        success:
+          help: Number of messages that were processed without an error.
+          type: number
+        failure:
+          help: Number of messages that could not be processed.
+          type: number
+        results:
+          help: Array of objects representing the status of the messages processed.
+          type: object
+  send_data_by_topic:
+    help: Send data message using topic
+    http:
+      port: 3000
+      method: post
+      path: /send-data-by-topic
+      contentType: application/json
+    arguments:
+      topic: 
+        type: string
+        in: requestBody
+        required: true
+        help: Topic name to send a message to, e.g. "weather". (Note- "/topics/" prefix should not be provided)
+      data : 
+        type: object
+        in: requestBody
+        required: true
+        help: The data object contains a list of key/value pairs.
+    output:   
+      type: object
+      contentType: application/json
+      properties:
+        Ok:
+          help: Boolean value which represents message sent is successful or failed.
+          type: boolean
+        status_code:
+          help: HTTP status code for the response.
+          type: int
+        message_id:
+          help: The topic message ID when FCM has successfully received the request and will attempt to deliver to all subscribed devices.
+          type: number
+        error:
+          help: Error that occurred when processing the message. 
+          type: string
+  send_notification_data_by_token:
+    help: Send notification and data message using token.
+    http:
+      port: 3000
+      method: post
+      path: /send-notification-data-by-token
+      contentType: application/json
+    arguments:
+      token: 
+        type: string
+        in: requestBody
+        required: true
+        help: Registration token to send a message to.
+      collapse_key:
+        type: string
+        in: requestBody
+        required: false
+        help: The identifier of a group of messages that can be collapsed, so that only the last message gets sent when delivery can be resumed
+      # priority:
+      #   type: enum
+      #   enum:
+      #   - NORMAL
+      #   - HIGH
+      #   in: requestBody
+      #   required: false
+      #   help: Message priority. Can take "normal" and "high" values
+      ttl:
+        type: string
+        in: requestBody
+        required: false
+        help: How long (in seconds) the message should be kept in FCM storage if the device is offline. The maximum time to live supported is 4 weeks, and the default value is 4 weeks if not set
+      restricted_package_name:
+        type: string
+        in: requestBody
+        required: false
+        help: Package name of the application where the registration token must match in order to receive the message
+      notification: 
+          type: object
+          in: requestBody
+          required: true
+          help: The notification object contains title and body.Both are of string type wrapped in object
+      data: 
+        type: object
+        in: requestBody
+        required: true
+        help: The data object contains a list of key/value pairs.
+    output:   
+      type: object
+      contentType: application/json
+      properties:
+        Ok:
+          help: Boolean value which represents message sent is successful or failed.
+          type: boolean
+        status_code:
+          help: HTTP status code for the response.
+          type: int
+        multicast_id:
+          help: Unique ID (number) identifying the multicast message.
+          type: number
+        success:
+          help: Number of messages that were processed without an error.
+          type: number
+        failure:
+          help: Number of messages that could not be processed.
+          type: number
+        results:
+          help: Array of objects representing the status of the messages processed.
+          type: object
+  send_notification_data_by_topic:
+    help: Send notification and data message using topic.
+    http:
+      port: 3000
+      method: post
+      path: /send-notification-data-by-topic
+      contentType: application/json
+    arguments:
+      topic: 
+        type: string
+        in: requestBody
+        required: true
+        help: Topic name to send a message to, e.g. "weather". (Note- "/topics/" prefix should not be provided)
+      collapse_key:
+        type: string
+        in: requestBody
+        required: false
+        help: The identifier of a group of messages that can be collapsed, so that only the last message gets sent when delivery can be resumed
+      # priority:
+      #   type: enum
+      #   enum:
+      #   - NORMAL
+      #   - HIGH
+      #   in: requestBody
+      #   required: false
+      #   help: Message priority. Can take "normal" and "high" values
+      ttl:
+        type: string
+        in: requestBody
+        required: false
+        help: How long (in seconds) the message should be kept in FCM storage if the device is offline. The maximum time to live supported is 4 weeks, and the default value is 4 weeks if not set
+      restricted_package_name:
+        type: string
+        in: requestBody
+        required: false
+        help: Package name of the application where the registration token must match in order to receive the message
+      notification: 
+          type: object
+          in: requestBody
+          required: true
+          help: The notification object contains title and body.Both are of string type wrapped in object
+      data: 
+        type: object
+        in: requestBody
+        required: true
+        help: The data object contains a list of key/value pairs.
+    output:   
+      type: object
+      contentType: application/json
+      properties:
+        Ok:
+          help: Boolean value which represents message sent is successful or failed.
+          type: boolean
+        status_code:
+          help: HTTP status code for the response.
+          type: int
+        message_id:
+          help: The topic message ID when FCM has successfully received the request and will attempt to deliver to all subscribed devices.
+          type: number
+        error:
+          help: Error that occurred when processing the message. 
+          type: string
 environment:
   SERVER_KEY:
     type: string
     required: true
-    help: server key for stripe   
+    help: server key for firebase
     
