@@ -45,13 +45,18 @@ actions:
         in: requestBody
         required: false
         help: Package name of the application where the registration token must match in order to receive the message
-      notification: 
-          type: object
-          in: requestBody
-          required: true
-          help: The notification object contains title and body.Both are of string type wrapped in object
+      title:
+        type: string
+        in: requestBody
+        required: true
+        help: Title for notification object.
+      body: 
+        type: string
+        in: requestBody
+        required: true
+        help: Message body for notification object.
       data: 
-        type: object
+        type: map
         in: requestBody
         required: true
         help: The data object contains a list of key/value pairs.
@@ -59,7 +64,7 @@ actions:
       type: object
       contentType: application/json
       properties:
-        Ok:
+        ok:
           help: Boolean value which represents message sent is successful or failed.
           type: boolean
         status_code:
@@ -108,13 +113,18 @@ actions:
         in: requestBody
         required: false
         help: Package name of the application where the registration token must match in order to receive the message
-      notification: 
-          type: object
-          in: requestBody
-          required: true
-          help: The notification object contains title and body.Both are of string type wrapped in object
+      title:
+        type: string
+        in: requestBody
+        required: true
+        help: Title for notification object.
+      body: 
+        type: string
+        in: requestBody
+        required: true
+        help: Message body for notification object.
       data: 
-        type: object
+        type: map
         in: requestBody
         required: true
         help: The data object contains a list of key/value pairs.
@@ -122,7 +132,7 @@ actions:
       type: object
       contentType: application/json
       properties:
-        Ok:
+        ok:
           help: Boolean value which represents message sent is successful or failed.
           type: boolean
         status_code:
