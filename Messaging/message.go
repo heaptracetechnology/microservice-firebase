@@ -2,46 +2,67 @@ package Messaging
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"github.com/NaySoftware/go-fcm"
+	"io/ioutil"
 	"net/http"
 	"os"
 )
 
-type Message struct {
-    Success int `json:"success"`
-    TopicMsgid string `json:"topic_msgid"`
-	Status string `json:"status"`
+type ArgsData struct {
+	Token string      `json:"token"`
+	Title string      `json:"title"`
+	Body  string      `json:"body"`
+	Icon  string      `json:"icon"`
+	Data  interface{} `json:"data"`
 }
 
-type MesssageToTopic struct {
-    Topic string `json:"topic"`
-    Body map[string]string `json:"body"`
-}
-
-//Send Message
-func SendMessage(w http.ResponseWriter, r *http.Request) {
+//Send Message By Token
+func SendMessageByToken(w http.ResponseWriter, r *http.Request) {
 
 	var serverKey = os.Getenv("SERVER_KEY")
-	
-	body, err := ioutil.ReadAll(r.Body)
+
+	b, err := ioutil.ReadAll(r.Body)
+	defer r.Body.Close()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), 500)
+		return
 	}
 
-	messsageToTopic := new(MesssageToTopic)
-	err = json.Unmarshal([]byte(body), messsageToTopic)
+	var argsdata ArgsData
+	err = json.Unmarshal(b, &argsdata)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		WriteErrorResponse(w, err)
+		return
 	}
 
-	c := fcm.NewFcmClient(serverKey)
-	c.NewFcmMsgTo(messsageToTopic.Topic, messsageToTopic.Body)
-	status, err := c.Send()
+	client := fcm.NewFcmClient(serverKey)
 
-	bytes, err := json.Marshal(status)
-	
-	WriteJsonResponse(w, bytes, 200)
+	notification := &fcm.NotificationPayload{
+		Title: argsdata.Title,
+		Body:  argsdata.Body,
+		Icon:  argsdata.Icon,
+	}
+
+	message := &fcm.FcmMsg{
+		Data:         argsdata.Data,
+		To:           argsdata.Token,
+		Notification: *notification,
+	}
+
+	client.Message = *message
+
+	response, err := client.Send()
+	if err != nil {
+		WriteErrorResponse(w, err)
+		return
+	}
+	bytes, _ := json.Marshal(response)
+	WriteJsonResponse(w, bytes, http.StatusCreated)
+}
+
+func WriteErrorResponse(w http.ResponseWriter, err error) {
+	msgbytes, _ := json.Marshal(err)
+	WriteJsonResponse(w, msgbytes, http.StatusBadRequest)
 }
 
 func WriteJsonResponse(w http.ResponseWriter, bytes []byte, code int) {

@@ -18,10 +18,10 @@ type Routes []Route
 
 var routes = Routes{
     Route{
-        "SendMessage",
+        "SendMessageByToken",
         "POST",
-        "/send-message",
-        Messaging.SendMessage,
+        "/send-message-by-token",
+        Messaging.SendMessageByToken,
     },
 }
 

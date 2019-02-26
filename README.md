@@ -21,9 +21,9 @@ omg build
 
 ### CLI
 
-##### Create Charge
+##### Send Message By Token
 ```sh
-$ omg run sendmessage -a topic=<TOPIC_NAME> -a body=<MESSAGE_BODY> -e SERVER_KEY=<SERVER_KEY>
+$ omg run send_message_by_token -a token=<TOKEN> -a title=<NOTIFICATION_TITLE> -a body=<NOTIFICATION_BODY> -a icon=<NOTIFICATION_ICON> -a data=<DATA_OBJECT>  -e SERVER_KEY=<SERVER_KEY>
 ```
 
 ## License
