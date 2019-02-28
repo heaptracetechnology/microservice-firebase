@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <testsuite name="Send Message By Token" tests="2" failures="0" errors="0" time="0.594">
+      <testcase name="Firebase cloud messaging Send message by token SendMessageByToken Should result http.StatusOK" classname="Send Message By Token" time="0.396976882"></testcase>
+      <testcase name="Firebase cloud messaging Send message by topic SendMessageByTopic Should result http.StatusOK" classname="Send Message By Token" time="0.196893514"></testcase>
+  </testsuite>

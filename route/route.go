@@ -23,6 +23,12 @@ var routes = Routes{
         "/send-message-by-token",
         Messaging.SendMessageByToken,
     },
+    Route{
+        "SendMessageByTopic",
+        "POST",
+        "/send-message-by-topic",
+        Messaging.SendMessageByTopic,
+    },
 }
 
 func NewRouter() *mux.Router {

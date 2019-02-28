@@ -2,18 +2,22 @@ package Messaging
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/NaySoftware/go-fcm"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 )
 
 type ArgsData struct {
-	Token string      `json:"token"`
-	Title string      `json:"title"`
-	Body  string      `json:"body"`
-	Icon  string      `json:"icon"`
-	Data  interface{} `json:"data"`
+	Token           string      `json:"token"`
+	Topic           string      `json:"topic"`
+	Title           string      `json:"title"`
+	Body            string      `json:"body"`
+	Icon            string      `json:"icon"`
+	Data            interface{} `json:"data"`
+	RegistrationIds []string    `json:"registration_ids"`
 }
 
 //Send Message By Token
@@ -21,15 +25,15 @@ func SendMessageByToken(w http.ResponseWriter, r *http.Request) {
 
 	var serverKey = os.Getenv("SERVER_KEY")
 
-	b, err := ioutil.ReadAll(r.Body)
+	body, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		http.Error(w, err.Error(), 500)
+		WriteErrorResponse(w, err)
 		return
 	}
 
 	var argsdata ArgsData
-	err = json.Unmarshal(b, &argsdata)
+	err = json.Unmarshal(body, &argsdata)
 	if err != nil {
 		WriteErrorResponse(w, err)
 		return
@@ -44,9 +48,10 @@ func SendMessageByToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	message := &fcm.FcmMsg{
-		Data:         argsdata.Data,
-		To:           argsdata.Token,
-		Notification: *notification,
+		Data:            argsdata.Data,
+		To:              argsdata.Token,
+		Notification:    *notification,
+		RegistrationIds: argsdata.RegistrationIds,
 	}
 
 	client.Message = *message
@@ -57,7 +62,55 @@ func SendMessageByToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	bytes, _ := json.Marshal(response)
-	WriteJsonResponse(w, bytes, http.StatusCreated)
+	WriteJsonResponse(w, bytes, http.StatusOK)
+}
+
+//Send Message By Topic
+func SendMessageByTopic(w http.ResponseWriter, r *http.Request) {
+
+	var serverKey = os.Getenv("SERVER_KEY")
+	client := fcm.NewFcmClient(serverKey)
+	body, err := ioutil.ReadAll(r.Body)
+	defer r.Body.Close()
+	if err != nil {
+		WriteErrorResponse(w, err)
+		return
+	}
+
+	var argsdata ArgsData
+	err = json.Unmarshal(body, &argsdata)
+	if err != nil {
+		WriteErrorResponse(w, err)
+		return
+	}
+
+	notification := &fcm.NotificationPayload{
+		Title: argsdata.Title,
+		Body:  argsdata.Body,
+		Icon:  argsdata.Icon,
+	}
+	message := &fcm.FcmMsg{
+		Data:         argsdata.Data,
+		To:           argsdata.Token,
+		Notification: *notification,
+	}
+
+	token := argsdata.Token
+	topic := argsdata.Topic
+	to := token + "/" + topic
+
+	client.NewFcmMsgTo(to, message)
+	response, err := client.Send()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	bytes, _ := json.Marshal(response)
+	WriteJsonResponse(w, bytes, http.StatusOK)
+	fmt.Println("Successfully sent message:", response)
+}
+
+func GetResult() int {
+	return http.StatusOK
 }
 
 func WriteErrorResponse(w http.ResponseWriter, err error) {
