@@ -1,0 +1,18 @@
+mode: set
+github.com/user/microservice-firebase/Messaging/message.go:23.65,29.16 4 1
+github.com/user/microservice-firebase/Messaging/message.go:34.2,36.16 3 1
+github.com/user/microservice-firebase/Messaging/message.go:41.2,59.16 6 1
+github.com/user/microservice-firebase/Messaging/message.go:63.2,64.44 2 1
+github.com/user/microservice-firebase/Messaging/message.go:29.16,32.3 2 0
+github.com/user/microservice-firebase/Messaging/message.go:36.16,39.3 2 0
+github.com/user/microservice-firebase/Messaging/message.go:59.16,62.3 2 0
+github.com/user/microservice-firebase/Messaging/message.go:68.65,74.16 5 1
+github.com/user/microservice-firebase/Messaging/message.go:79.2,81.16 3 1
+github.com/user/microservice-firebase/Messaging/message.go:86.2,103.16 8 1
+github.com/user/microservice-firebase/Messaging/message.go:106.2,107.44 2 1
+github.com/user/microservice-firebase/Messaging/message.go:74.16,77.3 2 0
+github.com/user/microservice-firebase/Messaging/message.go:81.16,84.3 2 0
+github.com/user/microservice-firebase/Messaging/message.go:103.16,105.3 1 0
+github.com/user/microservice-firebase/Messaging/message.go:110.22,112.2 1 1
+github.com/user/microservice-firebase/Messaging/message.go:114.59,117.2 2 0
+github.com/user/microservice-firebase/Messaging/message.go:119.71,123.2 3 1
