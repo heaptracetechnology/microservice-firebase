@@ -3,6 +3,7 @@ An OMG service for Firebase, it allows to clod messaging with the subscribe clie
 
 [![Open Microservice Guide](https://img.shields.io/badge/OMG-enabled-brightgreen.svg?style=for-the-badge)](https://microservice.guide)
 ![Build Status](https://travis-ci.com/heaptracetechnology/microservice-firebase.svg?branch=master)
+[![codecov](https://codecov.io/gh/heaptracetechnology/microservice-firebase/branch/master/graph/badge.svg)](https://codecov.io/gh/heaptracetechnology/microservice-firebase)
 
 ## [OMG](hhttps://microservice.guide) CLI
 
