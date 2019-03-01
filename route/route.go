@@ -2,8 +2,8 @@ package route
 
 import (
     "github.com/gorilla/mux"
+    "github.com/user/microservice-firebase/messaging"
     "log"
-    "messaging"
     "net/http"
 )
 
@@ -21,13 +21,13 @@ var routes = Routes{
         "SendMessageByToken",
         "POST",
         "/send-message-by-token",
-        Messaging.SendMessageByToken,
+        messaging.SendMessageByToken,
     },
     Route{
         "SendMessageByTopic",
         "POST",
         "/send-message-by-topic",
-        Messaging.SendMessageByTopic,
+        messaging.SendMessageByTopic,
     },
 }
 
