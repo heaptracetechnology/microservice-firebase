@@ -143,6 +143,11 @@ actions:
         in: requestBody
         required: false
         help: The data object contains a list of key/value pairs.
+      icon:
+        type: string
+        in: requestBody
+        required: false
+        help: The icon on notification bar
     output:
       type: object
       contentType: application/json

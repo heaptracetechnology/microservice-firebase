@@ -2,7 +2,6 @@ package Messaging
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/NaySoftware/go-fcm"
 	"io/ioutil"
 	"log"
@@ -106,7 +105,6 @@ func SendMessageByTopic(w http.ResponseWriter, r *http.Request) {
 	}
 	bytes, _ := json.Marshal(response)
 	WriteJsonResponse(w, bytes, http.StatusOK)
-	fmt.Println("Successfully sent message:", response)
 }
 
 func GetResult() int {
