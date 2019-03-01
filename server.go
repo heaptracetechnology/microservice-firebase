@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/microservice-firebase/route"
+	"route"
 	"log"
 	"net/http"
 )
