@@ -2,7 +2,7 @@ package route
 
 import (
     "github.com/gorilla/mux"
-    "github.com/microservice-firebase/Messaging"
+    "Messaging"
     "log"
     "net/http"
 )
