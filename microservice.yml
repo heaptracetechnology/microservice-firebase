@@ -50,7 +50,7 @@ actions:
       registration_ids:
         type: list
         in: requestBody
-        required:     
+        required: false     
         help: List of registration ids of multiple devices.
       # priority:
       #   type: enum
