@@ -29,7 +29,7 @@ $ omg run send_message_by_token -a token=<TOKEN> -a title=<NOTIFICATION_TITLE> -
 ```
 ##### Send Message By Topic
 ```sh
-$ omg run send_message_by_topic -a token=<TOKEN> -a token=<TOPIC> -a body=<NOTIFICATION_BODY> -a icon=<NOTIFICATION_ICON> -a data=<DATA_OBJECT>  -e SERVER_KEY=<SERVER_KEY>
+$ omg run send_message_by_topic -a token=<TOKEN> -a topic=<TOPIC> -a body=<NOTIFICATION_BODY> -a icon=<NOTIFICATION_ICON> -a data=<DATA_OBJECT>  -e SERVER_KEY=<SERVER_KEY>
 ```
 ## License
 ### [MIT](https://choosealicense.com/licenses/mit/)
