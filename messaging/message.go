@@ -5,7 +5,6 @@ import (
 	"github.com/NaySoftware/go-fcm"
 	"github.com/heaptracetechnology/microservice-firebase/result"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 )
@@ -27,9 +26,6 @@ func SendMessageByToken(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
-	if err != nil {
-		result.WriteErrorResponse(w, err)
-	}
 
 	var argsdata ArgsData
 	err = json.Unmarshal(body, &argsdata)
@@ -54,9 +50,9 @@ func SendMessageByToken(w http.ResponseWriter, r *http.Request) {
 
 	client.Message = *message
 
-	response, err := client.Send()
-	if err != nil {
-		result.WriteErrorResponse(w, err)
+	response, errr := client.Send()
+	if errr != nil {
+		result.WriteErrorResponse(w, errr)
 	}
 	bytes, _ := json.Marshal(response)
 	result.WriteJsonResponse(w, bytes, http.StatusOK)
@@ -69,9 +65,6 @@ func SendMessageByTopic(w http.ResponseWriter, r *http.Request) {
 	client := fcm.NewFcmClient(serverKey)
 	body, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
-	if err != nil {
-		result.WriteErrorResponse(w, err)
-	}
 
 	var argsdata ArgsData
 	err = json.Unmarshal(body, &argsdata)
@@ -95,9 +88,9 @@ func SendMessageByTopic(w http.ResponseWriter, r *http.Request) {
 	to := token + "/" + topic
 
 	client.NewFcmMsgTo(to, message)
-	response, err := client.Send()
-	if err != nil {
-		log.Fatalln(err)
+	response, errr := client.Send()
+	if errr != nil {
+		result.WriteErrorResponse(w, errr)
 	}
 	bytes, _ := json.Marshal(response)
 	result.WriteJsonResponse(w, bytes, http.StatusOK)
