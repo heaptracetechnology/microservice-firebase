@@ -3,6 +3,7 @@ package messaging
 import (
 	"encoding/json"
 	"github.com/NaySoftware/go-fcm"
+	"github.com/heaptracetechnology/microservice-firebase/result"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -27,15 +28,13 @@ func SendMessageByToken(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		WriteErrorResponse(w, err)
-		return
+		result.WriteErrorResponse(w, err)
 	}
 
 	var argsdata ArgsData
 	err = json.Unmarshal(body, &argsdata)
 	if err != nil {
-		WriteErrorResponse(w, err)
-		return
+		result.WriteErrorResponse(w, err)
 	}
 
 	client := fcm.NewFcmClient(serverKey)
@@ -57,11 +56,10 @@ func SendMessageByToken(w http.ResponseWriter, r *http.Request) {
 
 	response, err := client.Send()
 	if err != nil {
-		WriteErrorResponse(w, err)
-		return
+		result.WriteErrorResponse(w, err)
 	}
 	bytes, _ := json.Marshal(response)
-	WriteJsonResponse(w, bytes, http.StatusOK)
+	result.WriteJsonResponse(w, bytes, http.StatusOK)
 }
 
 //Send Message By Topic
@@ -72,15 +70,13 @@ func SendMessageByTopic(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		WriteErrorResponse(w, err)
-		return
+		result.WriteErrorResponse(w, err)
 	}
 
 	var argsdata ArgsData
 	err = json.Unmarshal(body, &argsdata)
 	if err != nil {
-		WriteErrorResponse(w, err)
-		return
+		result.WriteErrorResponse(w, err)
 	}
 
 	notification := &fcm.NotificationPayload{
@@ -104,20 +100,5 @@ func SendMessageByTopic(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(err)
 	}
 	bytes, _ := json.Marshal(response)
-	WriteJsonResponse(w, bytes, http.StatusOK)
-}
-
-func GetResult() int {
-	return http.StatusOK
-}
-
-func WriteErrorResponse(w http.ResponseWriter, err error) {
-	msgbytes, _ := json.Marshal(err)
-	WriteJsonResponse(w, msgbytes, http.StatusBadRequest)
-}
-
-func WriteJsonResponse(w http.ResponseWriter, bytes []byte, code int) {
-	w.WriteHeader(code)
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.Write(bytes)
+	result.WriteJsonResponse(w, bytes, http.StatusOK)
 }
