@@ -29,9 +29,6 @@ func SendMessageByToken(w http.ResponseWriter, r *http.Request) {
 
 	var argsdata ArgsData
 	err = json.Unmarshal(body, &argsdata)
-	if err != nil {
-		result.WriteErrorResponse(w, err)
-	}
 
 	client := fcm.NewFcmClient(serverKey)
 
@@ -50,9 +47,9 @@ func SendMessageByToken(w http.ResponseWriter, r *http.Request) {
 
 	client.Message = *message
 
-	response, errr := client.Send()
-	if errr != nil {
-		result.WriteErrorResponse(w, errr)
+	response, err := client.Send()
+	if err != nil {
+		result.WriteErrorResponse(w, err)
 	}
 	bytes, _ := json.Marshal(response)
 	result.WriteJsonResponse(w, bytes, http.StatusOK)
@@ -68,9 +65,6 @@ func SendMessageByTopic(w http.ResponseWriter, r *http.Request) {
 
 	var argsdata ArgsData
 	err = json.Unmarshal(body, &argsdata)
-	if err != nil {
-		result.WriteErrorResponse(w, err)
-	}
 
 	notification := &fcm.NotificationPayload{
 		Title: argsdata.Title,
@@ -88,9 +82,9 @@ func SendMessageByTopic(w http.ResponseWriter, r *http.Request) {
 	to := token + "/" + topic
 
 	client.NewFcmMsgTo(to, message)
-	response, errr := client.Send()
-	if errr != nil {
-		result.WriteErrorResponse(w, errr)
+	response, err := client.Send()
+	if err != nil {
+		result.WriteErrorResponse(w, err)
 	}
 	bytes, _ := json.Marshal(response)
 	result.WriteJsonResponse(w, bytes, http.StatusOK)
