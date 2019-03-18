@@ -25,10 +25,18 @@ func SendMessageByToken(w http.ResponseWriter, r *http.Request) {
 	var serverKey = os.Getenv("SERVER_KEY")
 
 	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		result.WriteErrorResponse(w, err)
+		return
+	}
 	defer r.Body.Close()
 
 	var argsdata ArgsData
-	err = json.Unmarshal(body, &argsdata)
+	er := json.Unmarshal(body, &argsdata)
+	if er != nil {
+		result.WriteErrorResponse(w, er)
+		return
+	}
 
 	client := fcm.NewFcmClient(serverKey)
 
@@ -47,9 +55,10 @@ func SendMessageByToken(w http.ResponseWriter, r *http.Request) {
 
 	client.Message = *message
 
-	response, err := client.Send()
-	if err != nil {
-		result.WriteErrorResponse(w, err)
+	response, sendErr := client.Send()
+	if sendErr != nil || response.StatusCode == 401 {
+		result.WriteErrorResponse(w, sendErr)
+		return
 	}
 	bytes, _ := json.Marshal(response)
 	result.WriteJsonResponse(w, bytes, http.StatusOK)
@@ -59,12 +68,22 @@ func SendMessageByToken(w http.ResponseWriter, r *http.Request) {
 func SendMessageByTopic(w http.ResponseWriter, r *http.Request) {
 
 	var serverKey = os.Getenv("SERVER_KEY")
+
 	client := fcm.NewFcmClient(serverKey)
 	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		result.WriteErrorResponse(w, err)
+		return
+	}
+
 	defer r.Body.Close()
 
 	var argsdata ArgsData
-	err = json.Unmarshal(body, &argsdata)
+	er := json.Unmarshal(body, &argsdata)
+	if er != nil {
+		result.WriteErrorResponse(w, er)
+		return
+	}
 
 	notification := &fcm.NotificationPayload{
 		Title: argsdata.Title,
@@ -82,9 +101,10 @@ func SendMessageByTopic(w http.ResponseWriter, r *http.Request) {
 	to := token + "/" + topic
 
 	client.NewFcmMsgTo(to, message)
-	response, err := client.Send()
-	if err != nil {
-		result.WriteErrorResponse(w, err)
+	response, sendErr := client.Send()
+	if sendErr != nil || response.StatusCode == 401 {
+		result.WriteErrorResponse(w, sendErr)
+		return
 	}
 	bytes, _ := json.Marshal(response)
 	result.WriteJsonResponse(w, bytes, http.StatusOK)

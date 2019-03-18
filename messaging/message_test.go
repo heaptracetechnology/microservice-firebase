@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -19,22 +20,119 @@ type TestArgsData struct {
 	Data  interface{} `json:"data"`
 }
 
-var _ = Describe("Firebase cloud messaging", func() {
+var _ = Describe("Firebase cloud messaging without server key", func() {
 
 	testmessage := TestArgsData{
 		Token: "eNstKTcV5Dg:APA91bEGvEHaP6-UdcLBfgaib1lOPUZgrP1QYDAOUoZc_ZQNNlGO1afiR5lGYqbuJTc4YQ0yn3Xogjuj1GeryvvgkcutItfu0kjMwCTIN2CNdp9oiQBPm2394FxHjWMyW8ZgsL1p4xHo",
 		Title: "Test cases",
 		Body:  "Hello body from cli"}
 
-	reqbody := new(bytes.Buffer)
-	json.NewEncoder(reqbody).Encode(testmessage)
+	requestBody := new(bytes.Buffer)
+	errr := json.NewEncoder(requestBody).Encode(testmessage)
+	if errr != nil {
+		log.Fatal(errr)
+	}
 
-	os.Setenv("SECRET_KEY", "AAAAY4LfSh4:APA91bEwy_Gn8glVVPfKmPiYKPx5nQVSW4XErmz0YBIpUqr9GrP2x6Zo-iHh-kMJn_v3mdGE9u2DB2HwaSiPX91zNcdgSlQke5Peti3AAFqt4DrPZ2fn4qJgCiHXH-OoZcPuxdNC-W8h")
-	req, err := http.NewRequest("POST", "/send-message-by-token", reqbody)
+	req, err := http.NewRequest("POST", "/send-message-by-token", requestBody)
 	if err != nil {
+		log.Fatal(err)
 	}
 	recorder := httptest.NewRecorder()
 	handler := http.HandlerFunc(SendMessageByToken)
+
+	handler.ServeHTTP(recorder, req)
+
+	Describe("Send message by token", func() {
+		Context("SendMessageByToken", func() {
+			It("Should result http.StatusBadRequest", func() {
+				Expect(recorder.Code).To(Equal(http.StatusBadRequest))
+			})
+		})
+	})
+})
+
+var _ = Describe("Firebase cloud messaging negative testing without enviroment variables", func() {
+
+	testmessage := TestArgsData{
+		Token: "eNstKTcV5Dg:APA91bEGvEHaP6-UdcLBfgaasasassaswOUoZc_ZQNNlGO1afiR5lGYqbuJTc4YQ0yn3Xogjuj1GeryvvgkcutItfu0kjMwCTIN2CNdp9oiQBPm2394FxHjWMyW8ZgsL1p4xHo",
+		Topic: "news",
+		Title: "Test cases",
+		Body:  "Hello body from cli"}
+	requestBody := new(bytes.Buffer)
+	errr := json.NewEncoder(requestBody).Encode(testmessage)
+	if errr != nil {
+		log.Fatal(errr)
+	}
+
+	req, err := http.NewRequest("POST", "/send-message-by-topic", requestBody)
+	if err != nil {
+		log.Fatal(err)
+	}
+	recorder := httptest.NewRecorder()
+	handler := http.HandlerFunc(SendMessageByTopic)
+	handler.ServeHTTP(recorder, req)
+
+	Describe("Send message by topic", func() {
+		Context("SendMessageByTopic", func() {
+			It("Should result http.StatusBadRequest", func() {
+				Expect(recorder.Code).To(Equal(http.StatusBadRequest))
+			})
+		})
+	})
+})
+
+var _ = Describe("Firebase cloud messaging negative testing for token", func() {
+
+	testmessage := []byte(`{"status":false}`)
+
+	requestBody := new(bytes.Buffer)
+	errr := json.NewEncoder(requestBody).Encode(testmessage)
+	if errr != nil {
+		log.Fatal(errr)
+	}
+
+	req, err := http.NewRequest("POST", "/send-message-by-token", requestBody)
+	if err != nil {
+		log.Fatal(err)
+	}
+	recorder := httptest.NewRecorder()
+	handler := http.HandlerFunc(SendMessageByToken)
+
+	handler.ServeHTTP(recorder, req)
+
+	Describe("Send message by token", func() {
+		Context("SendMessageByToken", func() {
+			It("Should result http.StatusBadRequest", func() {
+				Expect(recorder.Code).To(Equal(http.StatusBadRequest))
+			})
+		})
+	})
+})
+
+var _ = Describe("Firebase cloud messaging by token", func() {
+
+	serverKey := "AAAAY4LfSh4:APA91bEwy_Gn8glVVPfKmPiYKPx5nQVSW4XErmz0YBIpUqr9GrP2x6Zo-iHh-kMJn_v3mdGE9u2DB2HwaSiPX91zNcdgSlQke5Peti3AAFqt4DrPZ2fn4qJgCiHXH-OoZcPuxdNC-W8h"
+
+	os.Setenv("SERVER_KEY", serverKey)
+
+	testmessage := TestArgsData{
+		Token: "eNstKTcV5Dg:APA91bEGvEHaP6-UdcLBfgaib1lOPUZgrP1QYDAOUoZc_ZQNNlGO1afiR5lGYqbuJTc4YQ0yn3Xogjuj1GeryvvgkcutItfu0kjMwCTIN2CNdp9oiQBPm2394FxHjWMyW8ZgsL1p4xHo",
+		Title: "Test cases",
+		Body:  "Hello body from cli"}
+
+	requestBody := new(bytes.Buffer)
+	errr := json.NewEncoder(requestBody).Encode(testmessage)
+	if errr != nil {
+		log.Fatal(errr)
+	}
+
+	req, err := http.NewRequest("POST", "/send-message-by-token", requestBody)
+	if err != nil {
+		log.Fatal(err)
+	}
+	recorder := httptest.NewRecorder()
+	handler := http.HandlerFunc(SendMessageByToken)
+
 	handler.ServeHTTP(recorder, req)
 
 	Describe("Send message by token", func() {
@@ -46,18 +144,58 @@ var _ = Describe("Firebase cloud messaging", func() {
 	})
 })
 
-var _ = Describe("Firebase cloud messaging", func() {
+var _ = Describe("Firebase cloud messaging negative testing with args", func() {
+
+	serverKey := "AAAAY4LfSh4:APA91bEwy_Gn8glVVPfKmPiYKPx5nQVSW4XErmz0YBIpUqr9GrP2x6Zo-iHh-kMJn_v3mdGE9u2DB2HwaSiPX91zNcdgSlQke5Peti3AAFqt4DrPZ2fn4qJgCiHXH-OoZcPuxdNC-W8h"
+
+	os.Setenv("SERVER_KEY", serverKey)
+
+	testmessage := []byte(`{"status":false}`)
+
+	requestBody := new(bytes.Buffer)
+	errr := json.NewEncoder(requestBody).Encode(testmessage)
+	if errr != nil {
+		log.Fatal(errr)
+	}
+
+	req, err := http.NewRequest("POST", "/send-message-by-topic", requestBody)
+	if err != nil {
+		log.Fatal(err)
+	}
+	recorder := httptest.NewRecorder()
+	handler := http.HandlerFunc(SendMessageByTopic)
+	handler.ServeHTTP(recorder, req)
+
+	Describe("Send message by topic", func() {
+		Context("SendMessageByTopic", func() {
+			It("Should result http.StatusBadRequest", func() {
+				Expect(recorder.Code).To(Equal(http.StatusBadRequest))
+			})
+		})
+	})
+})
+
+var _ = Describe("Firebase cloud messaging negative testing for topic", func() {
+
+	serverKey := "AAAAY4LfSh4:APA91bEwy_Gn8glVVPfKmPiYKPx5nQVSW4XErmz0YBIpUqr9GrP2x6Zo-iHh-kMJn_v3mdGE9u2DB2HwaSiPX91zNcdgSlQke5Peti3AAFqt4DrPZ2fn4qJgCiHXH-OoZcPuxdNC-W8h"
+
+	os.Setenv("SERVER_KEY", serverKey)
 
 	testmessage := TestArgsData{
-		Token: "eNstKTcV5Dg:APA91bEGvEHaP6-UdcLBfgaib1lOPUZgrP1QYDAOUoZc_ZQNNlGO1afiR5lGYqbuJTc4YQ0yn3Xogjuj1GeryvvgkcutItfu0kjMwCTIN2CNdp9oiQBPm2394FxHjWMyW8ZgsL1p4xHo",
+		Token: "eNstKTcV5Dg:APA91bEGvEHaP6-UdcLBfgaasasassaswOUoZc_ZQNNlGO1afiR5lGYqbuJTc4YQ0yn3Xogjuj1GeryvvgkcutItfu0kjMwCTIN2CNdp9oiQBPm2394FxHjWMyW8ZgsL1p4xHo",
 		Topic: "news",
 		Title: "Test cases",
 		Body:  "Hello body from cli"}
-	reqbody := new(bytes.Buffer)
-	json.NewEncoder(reqbody).Encode(testmessage)
 
-	req, err := http.NewRequest("POST", "/send-message-by-topic", reqbody)
+	requestBody := new(bytes.Buffer)
+	errr := json.NewEncoder(requestBody).Encode(testmessage)
+	if errr != nil {
+		log.Fatal(errr)
+	}
+
+	req, err := http.NewRequest("POST", "/send-message-by-topic", requestBody)
 	if err != nil {
+		log.Fatal(err)
 	}
 	recorder := httptest.NewRecorder()
 	handler := http.HandlerFunc(SendMessageByTopic)
