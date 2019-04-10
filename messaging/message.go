@@ -23,8 +23,6 @@ type ArgsData struct {
 //Send Message By Token
 func SendMessageByToken(responseWriter http.ResponseWriter, request *http.Request) {
 
-	responseWriter.Header().Set("Content-Type", "application/json")
-
 	var serverKey = os.Getenv("SERVER_KEY")
 
 	body, err := ioutil.ReadAll(request.Body)
@@ -70,7 +68,6 @@ func SendMessageByToken(responseWriter http.ResponseWriter, request *http.Reques
 //Send Message By Topic
 func SendMessageByTopic(responseWriter http.ResponseWriter, request *http.Request) {
 
-	responseWriter.Header().Set("Content-Type", "application/json")
 	var serverKey = os.Getenv("SERVER_KEY")
 
 	client := fcm.NewFcmClient(serverKey)
