@@ -2,11 +2,12 @@ package messaging
 
 import (
 	"encoding/json"
-	"github.com/NaySoftware/go-fcm"
-	"github.com/heaptracetechnology/microservice-firebase/result"
 	"io/ioutil"
 	"net/http"
 	"os"
+
+	"github.com/NaySoftware/go-fcm"
+	"github.com/heaptracetechnology/microservice-firebase/result"
 )
 
 type ArgsData struct {
@@ -20,21 +21,23 @@ type ArgsData struct {
 }
 
 //Send Message By Token
-func SendMessageByToken(w http.ResponseWriter, r *http.Request) {
+func SendMessageByToken(responseWriter http.ResponseWriter, request *http.Request) {
+
+	responseWriter.Header().Set("Content-Type", "application/json")
 
 	var serverKey = os.Getenv("SERVER_KEY")
 
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := ioutil.ReadAll(request.Body)
 	if err != nil {
-		result.WriteErrorResponse(w, err)
+		result.WriteErrorResponse(responseWriter, err)
 		return
 	}
-	defer r.Body.Close()
+	defer request.Body.Close()
 
 	var argsdata ArgsData
 	er := json.Unmarshal(body, &argsdata)
 	if er != nil {
-		result.WriteErrorResponse(w, er)
+		result.WriteErrorResponse(responseWriter, er)
 		return
 	}
 
@@ -57,31 +60,32 @@ func SendMessageByToken(w http.ResponseWriter, r *http.Request) {
 
 	response, sendErr := client.Send()
 	if sendErr != nil || response.StatusCode == 401 {
-		result.WriteErrorResponse(w, sendErr)
+		result.WriteErrorResponse(responseWriter, sendErr)
 		return
 	}
 	bytes, _ := json.Marshal(response)
-	result.WriteJsonResponse(w, bytes, http.StatusOK)
+	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
 }
 
 //Send Message By Topic
-func SendMessageByTopic(w http.ResponseWriter, r *http.Request) {
+func SendMessageByTopic(responseWriter http.ResponseWriter, request *http.Request) {
 
+	responseWriter.Header().Set("Content-Type", "application/json")
 	var serverKey = os.Getenv("SERVER_KEY")
 
 	client := fcm.NewFcmClient(serverKey)
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := ioutil.ReadAll(request.Body)
 	if err != nil {
-		result.WriteErrorResponse(w, err)
+		result.WriteErrorResponse(responseWriter, err)
 		return
 	}
 
-	defer r.Body.Close()
+	defer request.Body.Close()
 
 	var argsdata ArgsData
 	er := json.Unmarshal(body, &argsdata)
 	if er != nil {
-		result.WriteErrorResponse(w, er)
+		result.WriteErrorResponse(responseWriter, er)
 		return
 	}
 
@@ -103,9 +107,9 @@ func SendMessageByTopic(w http.ResponseWriter, r *http.Request) {
 	client.NewFcmMsgTo(to, message)
 	response, sendErr := client.Send()
 	if sendErr != nil || response.StatusCode == 401 {
-		result.WriteErrorResponse(w, sendErr)
+		result.WriteErrorResponse(responseWriter, sendErr)
 		return
 	}
 	bytes, _ := json.Marshal(response)
-	result.WriteJsonResponse(w, bytes, http.StatusOK)
+	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
 }
