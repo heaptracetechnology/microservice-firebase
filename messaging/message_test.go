@@ -33,7 +33,7 @@ var _ = Describe("Firebase cloud messaging without server key", func() {
 		log.Fatal(errr)
 	}
 
-	req, err := http.NewRequest("POST", "/send-message-by-token", requestBody)
+	req, err := http.NewRequest("POST", "/sendMessageByToken", requestBody)
 	if err != nil {
 		log.Fatal(err)
 	}
