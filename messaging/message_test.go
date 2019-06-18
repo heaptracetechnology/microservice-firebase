@@ -64,7 +64,7 @@ var _ = Describe("Firebase cloud messaging negative testing without enviroment v
 		log.Fatal(errr)
 	}
 
-	req, err := http.NewRequest("POST", "/send-message-by-topic", requestBody)
+	req, err := http.NewRequest("POST", "/sendMessageByTopic", requestBody)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -91,7 +91,7 @@ var _ = Describe("Firebase cloud messaging negative testing for token", func() {
 		log.Fatal(errr)
 	}
 
-	req, err := http.NewRequest("POST", "/send-message-by-token", requestBody)
+	req, err := http.NewRequest("POST", "/sendMessageByToken", requestBody)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -126,7 +126,7 @@ var _ = Describe("Firebase cloud messaging by token", func() {
 		log.Fatal(errr)
 	}
 
-	req, err := http.NewRequest("POST", "/send-message-by-token", requestBody)
+	req, err := http.NewRequest("POST", "/sendMessageByToken", requestBody)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -158,7 +158,7 @@ var _ = Describe("Firebase cloud messaging negative testing with args", func() {
 		log.Fatal(errr)
 	}
 
-	req, err := http.NewRequest("POST", "/send-message-by-topic", requestBody)
+	req, err := http.NewRequest("POST", "/sendMessageByTopic", requestBody)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -193,7 +193,7 @@ var _ = Describe("Firebase cloud messaging negative testing for topic", func() {
 		log.Fatal(errr)
 	}
 
-	req, err := http.NewRequest("POST", "/send-message-by-topic", requestBody)
+	req, err := http.NewRequest("POST", "/sendMessageByTopic", requestBody)
 	if err != nil {
 		log.Fatal(err)
 	}
