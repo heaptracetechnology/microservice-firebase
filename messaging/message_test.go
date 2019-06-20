@@ -20,6 +20,8 @@ type TestArgsData struct {
 	Data  interface{} `json:"data"`
 }
 
+var serverKey = os.Getenv("FIREBASE_SERVER_KEY")
+
 var _ = Describe("Firebase cloud messaging without server key", func() {
 
 	testmessage := TestArgsData{
@@ -33,7 +35,7 @@ var _ = Describe("Firebase cloud messaging without server key", func() {
 		log.Fatal(errr)
 	}
 
-	req, err := http.NewRequest("POST", "/sendMessageByToken", requestBody)
+	req, err := http.NewRequest("POST", "/send-message-by-token", requestBody)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,7 +66,7 @@ var _ = Describe("Firebase cloud messaging negative testing without enviroment v
 		log.Fatal(errr)
 	}
 
-	req, err := http.NewRequest("POST", "/sendMessageByTopic", requestBody)
+	req, err := http.NewRequest("POST", "/send-message-by-topic", requestBody)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -91,7 +93,7 @@ var _ = Describe("Firebase cloud messaging negative testing for token", func() {
 		log.Fatal(errr)
 	}
 
-	req, err := http.NewRequest("POST", "/sendMessageByToken", requestBody)
+	req, err := http.NewRequest("POST", "/send-message-by-token", requestBody)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -111,8 +113,6 @@ var _ = Describe("Firebase cloud messaging negative testing for token", func() {
 
 var _ = Describe("Firebase cloud messaging by token", func() {
 
-	serverKey := "AAAAY4LfSh4:APA91bEwy_Gn8glVVPfKmPiYKPx5nQVSW4XErmz0YBIpUqr9GrP2x6Zo-iHh-kMJn_v3mdGE9u2DB2HwaSiPX91zNcdgSlQke5Peti3AAFqt4DrPZ2fn4qJgCiHXH-OoZcPuxdNC-W8h"
-
 	os.Setenv("SERVER_KEY", serverKey)
 
 	testmessage := TestArgsData{
@@ -126,7 +126,7 @@ var _ = Describe("Firebase cloud messaging by token", func() {
 		log.Fatal(errr)
 	}
 
-	req, err := http.NewRequest("POST", "/sendMessageByToken", requestBody)
+	req, err := http.NewRequest("POST", "/send-message-by-token", requestBody)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -146,8 +146,6 @@ var _ = Describe("Firebase cloud messaging by token", func() {
 
 var _ = Describe("Firebase cloud messaging negative testing with args", func() {
 
-	serverKey := "AAAAY4LfSh4:APA91bEwy_Gn8glVVPfKmPiYKPx5nQVSW4XErmz0YBIpUqr9GrP2x6Zo-iHh-kMJn_v3mdGE9u2DB2HwaSiPX91zNcdgSlQke5Peti3AAFqt4DrPZ2fn4qJgCiHXH-OoZcPuxdNC-W8h"
-
 	os.Setenv("SERVER_KEY", serverKey)
 
 	testmessage := []byte(`{"status":false}`)
@@ -158,7 +156,7 @@ var _ = Describe("Firebase cloud messaging negative testing with args", func() {
 		log.Fatal(errr)
 	}
 
-	req, err := http.NewRequest("POST", "/sendMessageByTopic", requestBody)
+	req, err := http.NewRequest("POST", "/send-message-by-topic", requestBody)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -177,8 +175,6 @@ var _ = Describe("Firebase cloud messaging negative testing with args", func() {
 
 var _ = Describe("Firebase cloud messaging negative testing for topic", func() {
 
-	serverKey := "AAAAY4LfSh4:APA91bEwy_Gn8glVVPfKmPiYKPx5nQVSW4XErmz0YBIpUqr9GrP2x6Zo-iHh-kMJn_v3mdGE9u2DB2HwaSiPX91zNcdgSlQke5Peti3AAFqt4DrPZ2fn4qJgCiHXH-OoZcPuxdNC-W8h"
-
 	os.Setenv("SERVER_KEY", serverKey)
 
 	testmessage := TestArgsData{
@@ -193,7 +189,7 @@ var _ = Describe("Firebase cloud messaging negative testing for topic", func() {
 		log.Fatal(errr)
 	}
 
-	req, err := http.NewRequest("POST", "/sendMessageByTopic", requestBody)
+	req, err := http.NewRequest("POST", "/send-message-by-topic", requestBody)
 	if err != nil {
 		log.Fatal(err)
 	}
