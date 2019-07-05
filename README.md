@@ -1,9 +1,9 @@
 # _Firebase_ OMG Microservice
 
 [![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-👍-green.svg?)](https://microservice.guide)
-[![Build Status](https://travis-ci.com/heaptracetechnology/microservice-firebase.svg?branch=master)](https://travis-ci.com/heaptracetechnology/microservice-firebase)
-[![codecov](https://codecov.io/gh/heaptracetechnology/microservice-firebase/branch/master/graph/badge.svg)](https://codecov.io/gh/heaptracetechnology/microservice-firebase)
-[![GolangCI](https://golangci.com/badges/github.com/golangci/golangci-web.svg)](https://golangci.com)
+[![Build Status](https://travis-ci.com/omg-services/firebase.svg?branch=master)](https://travis-ci.com/omg-services/firebase)
+[![codecov](https://codecov.io/gh/omg-services/firebase/branch/master/graph/badge.svg)](https://codecov.io/gh/omg-services/firebase)
+
 
 An OMG service for Firebase, it allows to clod messaging with the subscribe client.
 
