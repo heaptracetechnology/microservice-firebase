@@ -17,7 +17,7 @@ type ArgsData struct {
 	Body            string      `json:"body"`
 	Icon            string      `json:"icon"`
 	Data            interface{} `json:"data"`
-	RegistrationIds []string    `json:"registration_ids"`
+	RegistrationIds []string    `json:"registrationIds"`
 }
 
 //Send Message By Token

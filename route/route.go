@@ -20,13 +20,13 @@ var routes = Routes{
     Route{
         "SendMessageByToken",
         "POST",
-        "/send-message-by-token",
+        "/sendMessageByToken",
         messaging.SendMessageByToken,
     },
     Route{
         "SendMessageByTopic",
         "POST",
-        "/send-message-by-topic",
+        "/sendMessageByTopic",
         messaging.SendMessageByTopic,
     },
 }

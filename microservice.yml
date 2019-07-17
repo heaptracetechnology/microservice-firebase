@@ -14,12 +14,12 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
 actions:
-  send_message_by_token:
+  sendMessageByToken:
     help: Send notification and data message using token.
     http:
       port: 3000
       method: post
-      path: /send-message-by-token
+      path: /sendMessageByToken
       contentType: application/json
     arguments:
       token: 
@@ -47,7 +47,7 @@ actions:
         in: requestBody
         required: false
         help: The icon on notification bar
-      registration_ids:
+      registrationIds:
         type: list
         in: requestBody
         required: false     
@@ -65,11 +65,6 @@ actions:
         in: requestBody
         required: false
         help: How long (in seconds) the message should be kept in FCM storage if the device is offline. The maximum time to live supported is 4 weeks, and the default value is 4 weeks if not set
-      restricted_package_name:
-        type: string
-        in: requestBody
-        required: false
-        help: Package name of the application where the registration token must match in order to receive the message
     output:   
       type: object
       contentType: application/json
@@ -92,12 +87,12 @@ actions:
         results:
           help: Array of objects representing the status of the messages processed.
           type: object
-  send_message_by_topic:
+  sendMessageByTopic:
     help: Send notification and data message using topic.
     http:
       port: 3000
       method: post
-      path: /send-message-by-topic
+      path: /sendMessageByTopic
       contentType: application/json
     arguments:
       topic: 
@@ -123,11 +118,6 @@ actions:
         in: requestBody
         required: false
         help: How long (in seconds) the message should be kept in FCM storage if the device is offline. The maximum time to live supported is 4 weeks, and the default value is 4 weeks if not set
-      restricted_package_name:
-        type: string
-        in: requestBody
-        required: false
-        help: Package name of the application where the registration token must match in order to receive the message
       title:
         type: string
         in: requestBody
