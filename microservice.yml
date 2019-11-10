@@ -1,7 +1,7 @@
 omg: 1
 lifecycle:
   startup:
-    command: ["microservice-firebase"]
+    command: ['microservice-firebase']
 info:
   version: 1.0.0
   title: firebase
@@ -22,7 +22,7 @@ actions:
       path: /sendMessageByToken
       contentType: application/json
     arguments:
-      token: 
+      token:
         type: string
         in: requestBody
         required: false
@@ -32,12 +32,12 @@ actions:
         in: requestBody
         required: false
         help: Title for notification object.
-      body: 
+      body:
         type: string
         in: requestBody
         required: false
         help: Message body for notification object.
-      data: 
+      data:
         type: map
         in: requestBody
         required: false
@@ -50,7 +50,7 @@ actions:
       registrationIds:
         type: list
         in: requestBody
-        required: false     
+        required: false
         help: List of registration ids of multiple devices.
       # priority:
       #   type: enum
@@ -64,29 +64,34 @@ actions:
         type: string
         in: requestBody
         required: false
-        help: How long (in seconds) the message should be kept in FCM storage if the device is offline. The maximum time to live supported is 4 weeks, and the default value is 4 weeks if not set
-    output:   
+        help:
+          How long (in seconds) the message should be kept in FCM storage if the
+          device is offline. The maximum time to live supported is 4 weeks, and
+          the default value is 4 weeks if not set
+    output:
       type: object
       contentType: application/json
       properties:
         ok:
-          help: Boolean value which represents message sent is successful or failed.
+          help:
+            Boolean value which represents message sent is successful or failed.
           type: boolean
         status_code:
           help: HTTP status code for the response.
           type: int
         multicast_id:
           help: Unique ID (number) identifying the multicast message.
-          type: number
+          type: int
         success:
           help: Number of messages that were processed without an error.
-          type: number
+          type: int
         failure:
           help: Number of messages that could not be processed.
-          type: number
+          type: int
         results:
-          help: Array of objects representing the status of the messages processed.
-          type: object
+          help:
+            Array of objects representing the status of the messages processed.
+          type: map
   sendMessageByTopic:
     help: Send notification and data message using topic.
     http:
@@ -95,12 +100,14 @@ actions:
       path: /sendMessageByTopic
       contentType: application/json
     arguments:
-      topic: 
+      topic:
         type: string
         in: requestBody
         required: true
-        help: Topic name to send a message to, e.g. "weather". (Note- "/topics/" prefix should not be provided)
-      token: 
+        help:
+          Topic name to send a message to, e.g. "weather". (Note- "/topics/"
+          prefix should not be provided)
+      token:
         type: string
         in: requestBody
         required: true
@@ -117,18 +124,21 @@ actions:
         type: string
         in: requestBody
         required: false
-        help: How long (in seconds) the message should be kept in FCM storage if the device is offline. The maximum time to live supported is 4 weeks, and the default value is 4 weeks if not set
+        help:
+          How long (in seconds) the message should be kept in FCM storage if the
+          device is offline. The maximum time to live supported is 4 weeks, and
+          the default value is 4 weeks if not set
       title:
         type: string
         in: requestBody
         required: false
         help: Title for notification object.
-      body: 
+      body:
         type: string
         in: requestBody
         required: false
         help: Message body for notification object.
-      data: 
+      data:
         type: map
         in: requestBody
         required: false
@@ -143,20 +153,22 @@ actions:
       contentType: application/json
       properties:
         ok:
-          help: Boolean value which represents message sent is successful or failed.
+          help:
+            Boolean value which represents message sent is successful or failed.
           type: boolean
         status_code:
           help: HTTP status code for the response.
           type: int
         message_id:
-          help: The topic message ID when FCM has successfully received the request and will attempt to deliver to all subscribed devices.
-          type: number
+          help:
+            The topic message ID when FCM has successfully received the request
+            and will attempt to deliver to all subscribed devices.
+          type: int
         error:
-          help: Error that occurred when processing the message. 
+          help: Error that occurred when processing the message.
           type: string
 environment:
   SERVER_KEY:
     type: string
     required: true
     help: server key for firebase
-    
