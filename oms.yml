@@ -1,18 +1,19 @@
-omg: 1
-lifecycle:
-  startup:
-    command: ['microservice-firebase']
+oms: 1
 info:
   version: 1.0.0
   title: firebase
   description: This is a firebase service
   contact:
-    name: Rohit Shetty
-    url: https://github.com/ht68rohit
-    email: rohits@heaptrace.com
+    name: Open Microservices
+    url: 'https://openmicroservices.org'
+    email: core@openmicroservices.org
   license:
     name: MIT
-    url: https://opensource.org/licenses/MIT
+    url: 'https://opensource.org/licenses/MIT'
+lifecycle:
+  startup:
+    command:
+      - microservice-firebase
 actions:
   sendMessageByToken:
     help: Send notification and data message using token.
@@ -52,19 +53,11 @@ actions:
         in: requestBody
         required: false
         help: List of registration ids of multiple devices.
-      # priority:
-      #   type: enum
-      #   enum:
-      #   - NORMAL
-      #   - HIGH
-      #   in: requestBody
-      #   required: false
-      #   help: Message priority. Can take "normal" and "high" values
       ttl:
         type: string
         in: requestBody
         required: false
-        help:
+        help: >-
           How long (in seconds) the message should be kept in FCM storage if the
           device is offline. The maximum time to live supported is 4 weeks, and
           the default value is 4 weeks if not set
@@ -73,8 +66,7 @@ actions:
       contentType: application/json
       properties:
         ok:
-          help:
-            Boolean value which represents message sent is successful or failed.
+          help: Boolean value which represents message sent is successful or failed.
           type: boolean
         status_code:
           help: HTTP status code for the response.
@@ -89,8 +81,7 @@ actions:
           help: Number of messages that could not be processed.
           type: int
         results:
-          help:
-            Array of objects representing the status of the messages processed.
+          help: Array of objects representing the status of the messages processed.
           type: map
   sendMessageByTopic:
     help: Send notification and data message using topic.
@@ -104,7 +95,7 @@ actions:
         type: string
         in: requestBody
         required: true
-        help:
+        help: >-
           Topic name to send a message to, e.g. "weather". (Note- "/topics/"
           prefix should not be provided)
       token:
@@ -112,19 +103,11 @@ actions:
         in: requestBody
         required: true
         help: Registration token to send a message to.
-      # priority:
-      #   type: enum
-      #   enum:
-      #   - NORMAL
-      #   - HIGH
-      #   in: requestBody
-      #   required: false
-      #   help: Message priority. Can take "normal" and "high" values
       ttl:
         type: string
         in: requestBody
         required: false
-        help:
+        help: >-
           How long (in seconds) the message should be kept in FCM storage if the
           device is offline. The maximum time to live supported is 4 weeks, and
           the default value is 4 weeks if not set
@@ -153,14 +136,13 @@ actions:
       contentType: application/json
       properties:
         ok:
-          help:
-            Boolean value which represents message sent is successful or failed.
+          help: Boolean value which represents message sent is successful or failed.
           type: boolean
         status_code:
           help: HTTP status code for the response.
           type: int
         message_id:
-          help:
+          help: >-
             The topic message ID when FCM has successfully received the request
             and will attempt to deliver to all subscribed devices.
           type: int
